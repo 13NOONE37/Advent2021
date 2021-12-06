@@ -44,11 +44,14 @@ cardsDuplicate = cards
 os.system('cls' if os.name == 'nt' else 'clear')
 print('Numbers: ', numbers, '\n')
 for i, item in enumerate(cards):
-    print(cards[i])
-    for j in cards[i]:
-        if j in numbers:
-            print(j, ' exist')
-            print(cards.index(22))
+    for j in numbers:
+        for k in cards[i]:
+            print('lowest: ', cards[i],)
+    # print(cards[i])
+    # for j in cards[i]:
+    #     if j in numbers:
+    #         print(j, ' exist')
+    #         print(cards.index(22))
             # checkBingo(cards[i], cardsDuplicate)
     # time.sleep(20)
 
