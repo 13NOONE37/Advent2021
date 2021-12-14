@@ -111,6 +111,7 @@ os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def checkBingo(current, original, index, ii, lastAdded, stopExecuting):
+    print(ii)
     isBingo = False
     for i in range(0, 5):  # cols
         if current[i] == 'filled' and current[i+5] == 'filled' and current[i+10] == 'filled' and current[i+15] == 'filled' and current[i+20] == 'filled':
@@ -121,8 +122,12 @@ def checkBingo(current, original, index, ii, lastAdded, stopExecuting):
             stopExecuting = True
 
     if isBingo:
-        if not stopExecuting:
-            preResult[ii] = [index, lastAdded]
+        # if not ii in preResult:
+        copiedLastAdded = copy.deepcopy(lastAdded)
+        if stopExecuting == False:
+            preResult[ii] = [index, copiedLastAdded]
+            print(preResult, ii)
+            time.sleep(10)
 
 
 for i, item in enumerate(cards):
@@ -132,16 +137,20 @@ for i, item in enumerate(cards):
         for k in range(0, len(cards[i])):
             if cards[i][k] == j:
 
+                print('\n', len(preResult), 'i: ', i, '\n')
                 if not i in preResult:
                     lastAdded = cards[i][k]
                     cards[i][k] = 'filled'
+                    print('\n', 'i: ', i, '\n')
                     index += 1
-                    if not stopExecuting:
+                    if stopExecuting == False:
                         checkBingo(cards[i], cardsOriginal[i],
                                    index, i, lastAdded, stopExecuting)
 
-correctBingo = sorted(preResult.items(), key=lambda item: item[1])
-print(correctBingo)
+print("Length of cards: ", len(cards),
+      "\n Length of preResult: ", len(preResult))
+correctBingo = sorted(preResult.items(), key=lambda item: item[1])[
+    len(preResult)-1]
 
 correctBingoLastNumber = correctBingo[1][1]
 correctBingoIndex = correctBingo[0]
@@ -150,8 +159,6 @@ correctBingoValues = cardsOriginal[correctBingoIndex]
 unMarked = 0
 
 for i in range(0, len(correctBingoValues)):
-    # print(cards[correctBingoIndex][i], cardsOriginal[correctBingoIndex][i])
-    # time.sleep(1)
     if cards[correctBingoIndex][i] == cardsOriginal[correctBingoIndex][i]:
         unMarked += cards[correctBingoIndex][i]
 
