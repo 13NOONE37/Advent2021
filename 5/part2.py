@@ -1,8 +1,9 @@
 import time
 text = open('input.txt', 'r').readlines()
 
-w, h = 1000, 1000
+w, h = 10, 10
 Values = []
+ValuesDiagonals = []
 
 for i in text:
     i.replace('\n', '')
@@ -11,15 +12,11 @@ for i in text:
     y1 = int(temp[0].split(',')[1])
     x2 = int(temp[1].split(',')[0])
     y2 = int(temp[1].split(',')[1])
-    # print(temp, x1, y1, x2, y2)
     if x1 == x2 or y1 == y2:
         Values.append([x1, y1, x2, y2])
-        # print(temp, x1, y1, x2, y2)
-        # if x1 > w:
-        #     w = x1+1
-        # if y1 > h:
-        #     h = y1+1
-
+        # ValuesDiagonals.append([x1, y1, x2, y2])
+    elif (y1 == x2 and x1 == y2) or (x1 == y1 and x2 == y2):
+        ValuesDiagonals.append([x1, y1, x2, y2])
 
 Matrix = [[0 for x in range(w)] for y in range(h)]
 
@@ -32,11 +29,8 @@ for i in Values:
         else:
             range1 = i[3]
             range2 = i[1]
-        print('Range when x1==x2: ', range1, range2)
 
         for j in range(range1, range2+1):
-            print(i, j, i[0])
-            # time.sleep(2)
             Matrix[i[0]][j] += 1
 
     if i[1] == i[3]:
@@ -47,17 +41,40 @@ for i in Values:
         else:
             range1 = i[2]
             range2 = i[0]
-        print('Range when y1==y2: ', range1, range2)
 
         for j in range(range1, range2+1):
-            print(i, j, i[1])
             Matrix[j][i[1]] += 1
 
+for i in ValuesDiagonals:
     if i[0] == i[1] and i[2] == i[3]:
-        print('b')
-        time.sleep(10)
+        range1, range2 = None, None
+        if i[0] < i[2]:
+            range1 = i[0]
+            range2 = i[2]
+        else:
+            range1 = i[2]
+            range2 = i[0]
+
+        for j in range(range1, range2+1):
+            Matrix[j][j] += 1
+
     if i[0] == i[3] and i[1] == i[2]:
-        print('a')
+        range1, range2, range3, range4 = None, None, None, None
+        if i[0] < i[1]:
+            range1 = i[0]
+            range2 = i[1]
+            range3 = i[1]
+            range4 = i[0]
+        else:
+            range1 = i[1]
+            range2 = i[0]
+            range3 = i[0]
+            range4 = i[1]
+
+        for j in range(range1, range2+1):
+            print(j, (range2+range1)-j)
+            Matrix[j][(range2+range1)-j] += 1
+        print('\n')
 
 result = 0
 for i in range(0, w):
@@ -65,3 +82,4 @@ for i in range(0, w):
         if Matrix[i][j] >= 2:
             result += 1
 print('Result: ', result)
+print('\n\n', Matrix)
