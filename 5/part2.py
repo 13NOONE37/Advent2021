@@ -53,6 +53,11 @@ for i in Values:
             print(i, j, i[1])
             Matrix[j][i[1]] += 1
 
+    if i[0] == i[1] and i[2] == i[3]:
+        print('b')
+        time.sleep(10)
+    if i[0] == i[3] and i[1] == i[2]:
+        print('a')
 
 result = 0
 for i in range(0, w):
@@ -60,6 +65,3 @@ for i in range(0, w):
         if Matrix[i][j] >= 2:
             result += 1
 print('Result: ', result)
-# Matrix[0][0] = 1
-
-# print(Matrix[0][0])  # prints 1
