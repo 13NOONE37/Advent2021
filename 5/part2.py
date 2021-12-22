@@ -1,7 +1,7 @@
 import time
 text = open('input.txt', 'r').readlines()
 
-w, h = 10, 10
+w = 10
 Values = []
 ValuesDiagonals = []
 
@@ -13,100 +13,53 @@ for i in text:
     x2 = int(temp[1].split(',')[0])
     y2 = int(temp[1].split(',')[1])
     if x1 == x2 or y1 == y2:
-        Values.append([x1, y1, x2, y2])
-        # ValuesDiagonals.append([x1, y1, x2, y2])
-    elif (y1 == x2 and x1 == y2) or (x1 == y1 and x2 == y2):
-        ValuesDiagonals.append([x1, y1, x2, y2])
-    elif (abs(x1-y1) == x2+y2):
+        Values.append([min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2)])
+    if abs(x2-x1) != 0 and abs(y2-y1) != 0:
         ValuesDiagonals.append([x1, y1, x2, y2])
 
-Matrix = [[0 for x in range(w)] for y in range(h)]
+
+Matrix = [[0 for x in range(w)] for y in range(w)]
 
 for i in Values:
     if i[0] == i[2]:
-        range1, range2 = None, None
-        if i[1] < i[3]:
-            range1 = i[1]
-            range2 = i[3]
-        else:
-            range1 = i[3]
-            range2 = i[1]
-
+        range1, range2 = i[1], i[3]
         for j in range(range1, range2+1):
             Matrix[i[0]][j] += 1
-
     if i[1] == i[3]:
-        range1, range2 = None, None
-        if i[0] < i[2]:
-            range1 = i[0]
-            range2 = i[2]
-        else:
-            range1 = i[2]
-            range2 = i[0]
-
+        range1, range2 = i[0], i[2]
         for j in range(range1, range2+1):
             Matrix[j][i[1]] += 1
-
 for i in ValuesDiagonals:
-    if i[0] == 0 and i[1] == 0 and i[2] == i[3]:
-        print(i, 'lur')
-    if i[0] == i[1] and i[2] == i[3]:
-        range1, range2 = None, None
-        if i[0] < i[2]:
-            range1 = i[0]
-            range2 = i[2]
-        else:
-            range1 = i[2]
-            range2 = i[0]
+    anotherWay = (i[1] == i[2] and i[0] == i[3])
+    print("another way: ", anotherWay)
+    # range1, range2, range3, range4 = min(i[0], i[2]), min(
+    #     i[1], i[3]), max(i[0], i[2]), max(i[1], i[3])
+    range1, range2, range3, range4 = i[0], i[1], i[2], i[3]
 
-        for j in range(range1, range2+1):
-            Matrix[j][j] += 1
-
-    elif i[0] == i[3] and i[1] == i[2]:
-        range1, range2, range3, range4 = None, None, None, None
-        if i[0] < i[1]:
-            range1 = i[0]
-            range2 = i[1]
-            range3 = i[1]
-            range4 = i[0]
-        else:
-            range1 = i[1]
-            range2 = i[0]
-            range3 = i[0]
-            range4 = i[1]
-
-        for j in range(range1, range2+1):
-            Matrix[j][(range2+range1)-j] += 1
-        print('\n')
+    if anotherWay:
+        for a in range(range1, range4+1):
+            # print(a, (range1+range3)-a)
+            Matrix[a][(range1+range3)-a] += 1
     else:
-        print('Else: ', i)
-        range1, range2, range3, range4 = None, None, None, None
-        if i[0] < i[2]:
-            range1 = i[0]
-            range2 = i[2]
-        else:
-            range1 = i[2]
-            range2 = i[0]
-        if i[1] < i[3]:
-            range3 = i[1]
-            range4 = i[3]
-        else:
-            range3 = i[3]
-            range4 = i[1]
+        iterNumber = abs(range3-range1)
+        print('Abs: ', iterNumber, ' Ranges: ', range1, range2, range3, range4)
+        range1, range2, range3, range4 = min(i[0], i[2]), min(
+            i[1], i[3]), max(i[0], i[2]), max(i[1], i[3])
 
-        for j, k in zip(range(range1, range2+1), range(range3, range4+1)):
-            print(j, k)
-            Matrix[j][k] += 1
-        print('\n')
+        for x in range(0, iterNumber+1):
+            Matrix[range1+x][abs(range2-x)] += 1
+
+
+for y in range(0, w):
+    temp = ''
+    for x in range(0, w):
+        temp += str((Matrix[x][y]))
+    print(temp)
+    temp = ''
 
 result = 0
 for i in range(0, w):
-    for j in range(0, h):
+    for j in range(0, w):
         if Matrix[i][j] >= 2:
-            print('Number >=2 found on index:', i, j,
-                  ' that stands for: ', Matrix[i][j])
             result += 1
 print('Result: ', result)
-
-for i in Matrix:
-    print(i)
