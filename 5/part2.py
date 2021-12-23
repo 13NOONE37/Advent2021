@@ -1,7 +1,7 @@
 import time
 text = open('input.txt', 'r').readlines()
 
-w = 10
+w = 1000
 Values = []
 ValuesDiagonals = []
 
@@ -30,32 +30,22 @@ for i in Values:
         for j in range(range1, range2+1):
             Matrix[j][i[1]] += 1
 for i in ValuesDiagonals:
-    anotherWay = (i[1] == i[2] and i[0] == i[3])
-    print("another way: ", anotherWay)
-    # range1, range2, range3, range4 = min(i[0], i[2]), min(
-    #     i[1], i[3]), max(i[0], i[2]), max(i[1], i[3])
+    print(i)
     range1, range2, range3, range4 = i[0], i[1], i[2], i[3]
-
-    if anotherWay:
-        for a in range(range1, range4+1):
-            # print(a, (range1+range3)-a)
-            Matrix[a][(range1+range3)-a] += 1
-    else:
-        iterNumber = abs(range3-range1)
-        print('Abs: ', iterNumber, ' Ranges: ', range1, range2, range3, range4)
-        range1, range2, range3, range4 = min(i[0], i[2]), min(
-            i[1], i[3]), max(i[0], i[2]), max(i[1], i[3])
-
-        for x in range(0, iterNumber+1):
-            Matrix[range1+x][abs(range2-x)] += 1
+    iterator1, iterator2 = 1 if range1 <= range3 else -1, 1 if range2 <= range4 else -1
+    range3 += iterator1
+    range4 += iterator2
+    for x, y in zip(range(range1, range3, iterator1), range(range2, range4, iterator2)):
+        # print(x, y)
+        Matrix[x][y] += 1
 
 
-for y in range(0, w):
-    temp = ''
-    for x in range(0, w):
-        temp += str((Matrix[x][y]))
-    print(temp)
-    temp = ''
+# for y in range(0, w):
+    # temp = ''
+    # for x in range(0, w):
+    #     temp += str((Matrix[x][y]))
+    # print(temp)
+    # temp = ''
 
 result = 0
 for i in range(0, w):
